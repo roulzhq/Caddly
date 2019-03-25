@@ -1,0 +1,73 @@
+<template>
+  <div class="Editor">
+    <Heading title="Editor"></Heading>
+    <div>
+      <draggable :list="directives" group="directives" class="directives" @change="clonedDirective">
+        <div class="directive" v-for="(element, i) in directives" :key="i">
+          <div class="directive-name">{{ element.name }}</div>
+          <div class="directive-remove" @click="remove(i)">x</div>
+          <div class="directive-arguments">
+            <input
+              v-for="argument in element.arguments"
+              :key="argument.name"
+              type="text"
+              :placeholder="argument.name"
+              v-model="argument.value"
+              class="directive-argument"
+            >
+          </div>
+
+          <div class="directive-properties">
+            <div v-for="property in element.properties" :key="property.name" class="directive-property">
+              <label>{{ property.name }}</label>
+              <input type="text" v-model="property.value">
+            </div>
+          </div>
+        </div>
+      </draggable>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Prop, Vue } from "vue-property-decorator";
+
+import draggable from "vuedraggable";
+
+import Heading from "./Heading.vue";
+
+@Component({
+  components: {
+    Heading,
+    draggable
+  }
+})
+export default class Editor extends Vue {
+  @Prop() private msg!: string;
+
+  private labels: any = [];
+  private directives: any = [];
+
+  private clonedDirective(e: any) {
+    if (e.added) {
+      if (this.directives.filter((i: any) => i.name === e.added.element.name).length > 1) {
+        this.remove(e.added.newIndex);
+        alert("You cannot use the same directive twice");
+      }
+    }
+  }
+
+  private remove(i: number) {
+    this.directives.splice(i, 1);
+  }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="less">
+.Editor {
+  background: #f2f2f2;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  position: relative;
+}
+</style>

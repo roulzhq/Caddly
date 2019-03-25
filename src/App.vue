@@ -1,29 +1,212 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <div id="App">
+    <div class="App-heading">
+      <h1>
+        Caddly
+        <span>Alpha</span>
+      </h1>
+      <h2>Easy Caddyfile building!</h2>
+      <div class="App-heading-caddyVersion">For Caddy v0.11.5</div>
+    </div>
+    <div class="App-container">
+      <Editor msg="hey" class="test"></Editor>
+      <Sidebar msg="hey" class="test"></Sidebar>
+      <Nav msg="hey" class="test"></Nav>
+    </div>
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from './components/HelloWorld.vue';
+<script lang='ts'>
+import { Component, Vue } from "vue-property-decorator";
+import Editor from "./components/Editor.vue";
+import Sidebar from "./components/Sidebar.vue";
+import Nav from "./components/Nav.vue";
 
 @Component({
   components: {
-    HelloWorld,
-  },
+    Editor,
+    Sidebar,
+    Nav
+  }
 })
 export default class App extends Vue {}
 </script>
 
-<style lang="less">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+<style lang='less'>
+body {
+  margin: 0;
+  padding: 20px;
+  color: #263238;
+  background: #448aff;
+  background: -moz-linear-gradient(45deg, #448aff 0%, #2962ff 100%);
+  background: -webkit-linear-gradient(45deg, #448aff 0%, #2962ff 100%);
+  background: linear-gradient(45deg, #448aff 0%, #2962ff 100%);
+  overflow: hidden;
+}
+
+*::-moz-selection {
+  background: #ff4757;
+  color: #fafafa;
+}
+*::selection {
+  background: #ff4757;
+  color: #fafafa;
+}
+
+#App {
+  width: calc(100vw - 40px);
+  height: calc(100vh - 40px);
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  display: grid;
+  grid-template-rows: 50px auto;
+  margin: 0;
+  padding: 0;
+
+  .App-heading {
+    line-height: 30px;
+    display: inline-flex;
+
+    h1 {
+      color: #fafafa;
+      margin: 0;
+      display: inline;
+
+      span {
+        text-transform: uppercase;
+        padding: 5px 8px 6px 15px;
+        font-size: 0.6em;
+        background: #ff4757;
+        background: -moz-linear-gradient(45deg, #ff4757 0%, #ff6b81 100%);
+        background: -webkit-linear-gradient(45deg, #ff4757 0%, #ff6b81 100%);
+        background: linear-gradient(45deg, #ff4757 0%, #ff6b81 100%);
+        -webkit-clip-path: polygon(100% 0, 100% 100%, 15% 100%, 0 50%, 15% 0);
+        clip-path: polygon(100% 0, 100% 100%, 15% 100%, 0 50%, 15% 0);
+        vertical-align: middle;
+      }
+    }
+
+    h2 {
+      display: inline;
+      margin: 0 20px;
+      color: #eeeeee;
+    }
+
+    .App-heading-caddyVersion {
+      right: 30px;
+      position: absolute;
+      color: #eeeeee;
+      font-weight: bold;
+    }
+  }
+
+  .App-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto auto auto 100px;
+    grid-template-areas:
+      "editor editor editor sidebar"
+      "editor editor editor sidebar"
+      "editor editor editor sidebar"
+      "nav nav nav nav";
+    grid-gap: 30px;
+
+    .Editor {
+      grid-area: editor;
+    }
+
+    .Nav {
+      grid-area: nav;
+    }
+
+    .Sidebar {
+      grid-area: sidebar;
+    }
+  }
+}
+
+a {
+  color: #2962ff;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.directives {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+.directive {
+  margin: 10px;
+  padding: 8px;
+  border-bottom: 1px solid #dbdbdb;
+  background: #ffffff;
+  position: relative;
+
+  .directive-name {
+    font-weight: bold;
+    display: inline;
+    margin-right: 10px;
+    color: #006c96;
+  }
+
+  .directive-info {
+    display: none;
+    color: #006c96;
+  }
+
+  .directive-arguments {
+    display: inline-block;
+    margin-bottom: 5px;
+  }
+
+  .directive-argument {
+    display: inline-block;
+    outline: none;
+    border: none;
+    color: #008000;
+    background: transparent;
+    max-width: 80px;
+    background: #f2f2f2;
+    margin: 0 5px;
+    padding: 5px;
+  }
+
+  .directive-properties {
+    display: block;
+    margin-left: 8px;
+  }
+
+  .directive-property {
+    display: block;
+    width: 300px;
+    margin: 0 5px;
+    padding: 10px;
+  }
+
+  .directive-property label {
+    margin-right: 8px;
+    vertical-align: middle;
+    color: #835234;
+  }
+
+  .directive-property input {
+    float: right;
+    background: #f2f2f2;
+    border: none;
+    outline: none;
+    padding: 5px;
+  }
+
+  .directive-remove {
+    right: 10px;
+    position: absolute;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+  }
 }
 </style>
