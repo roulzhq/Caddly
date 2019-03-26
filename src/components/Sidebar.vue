@@ -149,16 +149,98 @@ export default class Sidebar extends Vue {
         { name: "ext", placeholder: "type", value: "" }
       ]
     },
-    { name: "on", arguments: [{ name: "event", value: "" }, { name: "command", value: "" }] },
-    { name: "root", arguments: [{ name: "path", value: "" }] },
+    {
+      name: "on",
+      arguments: [{ name: "event", value: "" }, { name: "command", value: "" }]
+    },
+    { name: "pprof", arguments: [] },
     {
       name: "proxy",
       arguments: [{ name: "from", value: "" }, { name: "to", value: "" }],
       properties: [
-        { name: "policy", placeholder: "", value: "" },
-        { name: "fail_timeout", placeholder: "", value: "" },
-        { name: "max_fails", placeholder: "", value: "" }
+        { name: "policy", placeholder: "name [value]", value: "" },
+        { name: "fail_timeout", placeholder: "duration", value: "" },
+        { name: "max_fails", placeholder: "integer", value: "" },
+        { name: "max_conns", placeholder: "integer", value: "" },
+        { name: "try_duration", placeholder: "duration", value: "" },
+        { name: "try_interval", placeholder: "duration", value: "" },
+        { name: "health_check", placeholder: "path", value: "" },
+        { name: "health_check_port", placeholder: "port", value: "" },
+        { name: "health_check_interval", placeholder: "interval_duration", value: "" },
+        { name: "health_check_timeout", placeholder: "timeout_duration", value: "" },
+        { name: "fallback_delay", placeholder: "delay_duration", value: "" },
+        { name: "header_upstream", placeholder: "name value", value: "" },
+        { name: "header_downstream", placeholder: "name value", value: "" },
+        { name: "keepalive", placeholder: "number", value: "" },
+        { name: "timeout", placeholder: "duration", value: "" },
+        { name: "without", placeholder: "prefix", value: "" },
+        { name: "except", placeholder: "ignored_paths...", value: "" },
+        { name: "upstream", placeholder: "to", value: "" },
+        { name: "ca_certificates", placeholder: "certs...", value: "" },
+        { name: "insecure_skip_verify", placeholder: "true/false", value: "" },
+        { name: "preset", placeholder: "", value: "" }
       ]
+    },
+    {
+      name: "push",
+      arguments: [
+        { name: "path", value: "" },
+        { name: "[resources...]", value: "" }
+      ],
+      properties: [
+        { name: "method", placeholder: "method", value: "" },
+        { name: "header", placeholder: "name value", value: "" },
+        { name: "resources", placeholder: "true/false", value: "" }
+      ]
+    },
+    {
+      name: "redir",
+      arguments: [
+        { name: "from", value: "" },
+        { name: "to", value: "" },
+        { name: "[code]", value: "" }
+      ]
+    },
+    { name: "request_id", arguments: [{ name: "[header_field]", value: "" }] },
+    {
+      name: "rewrite",
+      arguments: [
+        { name: "[not]", value: "" },
+        { name: "from", value: "" },
+        { name: "to", value: "" }
+      ]
+    },
+    { name: "root", arguments: [{ name: "path", value: "" }] },
+    {
+      name: "status",
+      arguments: [{ name: "code", value: "" }, { name: "path", value: "" }]
+    },
+    {
+      name: "templates",
+      arguments: [],
+      properties: [
+        { name: "path", placeholder: "basepath", value: "" },
+        { name: "ext", placeholder: "extensions...", value: "" },
+        { name: "between", placeholder: "open_delim close_delim", value: "" }
+      ]
+    },
+    {
+      name: "timeouts",
+      arguments: [],
+      properties: [
+        { name: "read", placeholder: "val", value: "" },
+        { name: "header", placeholder: "val", value: "" },
+        { name: "write", placeholder: "val", value: "" },
+        { name: "idle", placeholder: "val", value: "" }
+      ]
+    },
+    {
+      name: "tls",
+      arguments: [{ name: "of/email/self_signed/cert key", value: "" }]
+    },
+    {
+      name: "websocket",
+      arguments: [{ name: "[path]", value: "" }, { name: "command", value: "" }]
     }
   ];
 }
