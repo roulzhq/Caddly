@@ -111,7 +111,7 @@ body {
       "editor editor editor sidebar"
       "nav nav nav nav";
     grid-gap: 30px;
-    max-height: 85%;
+    height: 90vh;
     position: relative;
 
     .Editor {
@@ -172,7 +172,7 @@ a {
     border: none;
     color: #008000;
     background: transparent;
-    width: 120px;
+    width: 180px;
     background: #f2f2f2;
     margin: 0 5px;
     padding: 5px;
@@ -185,7 +185,7 @@ a {
 
   .directive-property {
     display: block;
-    width: 300px;
+    width: 400px;
     margin: 0 5px;
     padding: 10px;
   }
