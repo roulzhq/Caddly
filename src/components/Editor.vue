@@ -1,30 +1,36 @@
 <template>
   <div class="Editor">
     <Heading title="Editor"></Heading>
-    <div>
-      <draggable :list="directives" group="directives" class="directives" @change="clonedDirective">
-        <div class="directive" v-for="(element, i) in directives" :key="i">
-          <div class="directive-name">{{ element.name }}</div>
-          <div class="directive-remove" @click="remove(i)">x</div>
-          <div class="directive-arguments">
-            <input
-              v-for="argument in element.arguments"
-              :key="argument.name"
-              type="text"
-              :placeholder="argument.name"
-              v-model="argument.value"
-              class="directive-argument"
-            >
-          </div>
-
-          <div class="directive-properties">
-            <div v-for="property in element.properties" :key="property.name" class="directive-property">
-              <label>{{ property.name }}</label>
-              <input type="text" v-model="property.value">
-            </div>
+    <div class="Editor-sites">
+      <div class="Editor-sites-header">
+        <div
+          class="Editor-sites-header-tab"
+          v-for="site in sites"
+          :key="site.name"
+          @click="setActiveSite(site.name)"
+          :class="{active: site.active}"
+        >{{ site.name }}</div>
+        <button class="Editor-sites-header-newSite" @click="showSiteModal()">+</button>
+      </div>
+      <div class="Editor-sites-container">
+        <keep-alive>
+          <Site v-for="site in activeSites" :key="site.name"></Site>
+        </keep-alive>
+      </div>
+    </div>
+    <div v-if="showCreateSiteModal">
+      <Modal type="input" :onClose="createSite" title="Create a new Site">
+        <div
+          class="Editor-sites-new-modal"
+          style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column;"
+        >
+          <div>
+            <label style="display: block;">Name</label>
+            <input type="text" v-model="newSiteName">
+            <button @click="createSite(newSiteName)">Create</button>
           </div>
         </div>
-      </draggable>
+      </Modal>
     </div>
   </div>
 </template>
@@ -32,33 +38,52 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 
-import draggable from "vuedraggable";
-
 import Heading from "./Heading.vue";
+import Site from "./Site.vue";
+import Modal from "./Modal.vue";
 
 @Component({
   components: {
     Heading,
-    draggable
+    Site,
+    Modal
   }
 })
 export default class Editor extends Vue {
-  @Prop() private msg!: string;
+  private sites: any = [{ name: "127.0.0.1", active: true }];
+  private showCreateSiteModal: boolean = false;
+  private newSiteName: string = "";
 
-  private labels: any = [];
-  private directives: any = [];
+  private setActiveSite(name: string) {
+    this.sites = this.sites.map((i: any) =>
+      i.name === name ? { ...i, active: true } : { ...i, active: false }
+    );
+  }
 
-  private clonedDirective(e: any) {
-    if (e.added) {
-      if (this.directives.filter((i: any) => i.name === e.added.element.name).length > 1) {
-        this.remove(e.added.newIndex);
-        alert("You cannot use the same directive twice");
+  private showSiteModal() {
+    this.showCreateSiteModal = true;
+  }
+
+  private createSite(name: string) {
+    if (name) {
+      if (this.sites.filter((i: any) => i.name === name).length === 0) {
+        this.sites.map((i: any) => (i.active = false));
+
+        this.sites.push({
+          name,
+          active: true
+        });
+        this.showCreateSiteModal = false;
+        this.newSiteName = "";
       }
+      this.showCreateSiteModal = false;
+    } else {
+      this.showCreateSiteModal = false;
     }
   }
 
-  private remove(i: number) {
-    this.directives.splice(i, 1);
+  get activeSites() {
+    return this.sites.filter((i: any) => i.active);
   }
 }
 </script>
@@ -69,5 +94,35 @@ export default class Editor extends Vue {
   background: #f2f2f2;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   position: relative;
+
+  .Editor-sites {
+    .Editor-sites-header {
+      border-bottom: 4px solid #f2f2f2;
+      height: 35px;
+      line-height: 35px;
+      background: #ffffff;
+
+      .Editor-sites-header-tab {
+        display: inline;
+        padding: 10px;
+      }
+
+      .active {
+        background: #f2f2f2;
+      }
+
+      .Editor-sites-header-newSite {
+        right: 0;
+        position: absolute;
+        padding: 0 16px;
+        margin: 0;
+        line-height: 35px;
+      }
+
+      .Editor-sites-header-newSite:hover {
+        background: #448aff;
+      }
+    }
+  }
 }
 </style>
