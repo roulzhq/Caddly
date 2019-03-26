@@ -9,9 +9,9 @@
       <div class="App-heading-caddyVersion">For Caddy v0.11.5</div>
     </div>
     <div class="App-container">
-      <Editor msg="hey" class="test"></Editor>
-      <Sidebar msg="hey" class="test"></Sidebar>
-      <Nav msg="hey" class="test"></Nav>
+      <Editor></Editor>
+      <Sidebar></Sidebar>
+      <Nav></Nav>
     </div>
   </div>
 </template>
