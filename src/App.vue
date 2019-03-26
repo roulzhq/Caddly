@@ -111,6 +111,8 @@ body {
       "editor editor editor sidebar"
       "nav nav nav nav";
     grid-gap: 30px;
+    max-height: 85%;
+    position: relative;
 
     .Editor {
       grid-area: editor;
@@ -135,8 +137,9 @@ a {
 
 .directives {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 74px);
   position: absolute;
+  overflow-y: scroll;  
 }
 
 .directive {
@@ -169,7 +172,7 @@ a {
     border: none;
     color: #008000;
     background: transparent;
-    max-width: 80px;
+    width: 120px;
     background: #f2f2f2;
     margin: 0 5px;
     padding: 5px;
@@ -208,5 +211,27 @@ a {
     vertical-align: middle;
     cursor: pointer;
   }
+}
+
+input {
+  padding: 5px 10px;
+  border: none;
+  outline: none;
+}
+
+button {
+  padding: 5px 10px;
+  border: none;
+  outline: none;
+  margin: 8px;
+  display: inline-block;
+  color: #ffffff;
+  background: #2962ff;
+  cursor: pointer;
+  transition: 0.1s all cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+button:hover {
+  background: #448aff;
 }
 </style>
