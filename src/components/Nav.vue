@@ -1,6 +1,6 @@
 <template>
   <div class="Nav">
-    <a class="Nav-link Nav-link_primary">Export</a>
+    <a class="Nav-link Nav-link_primary" @click="onExportButtonClick()">Export</a>
     <a class="Nav-link Nav-link_primary">Copy to clipboard</a>
     <a class="Nav-link">Help</a>
     <a class="Nav-link">Report a bug</a>
@@ -12,7 +12,9 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component
-export default class Nav extends Vue {}
+export default class Nav extends Vue {
+  @Prop() private onExportButtonClick!: any;
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

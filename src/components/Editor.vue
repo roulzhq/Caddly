@@ -41,6 +41,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import Heading from "./Heading.vue";
 import Site from "./Site.vue";
 import Modal from "./Modal.vue";
+import store from "../store";
 
 @Component({
   components: {
@@ -50,7 +51,8 @@ import Modal from "./Modal.vue";
   }
 })
 export default class Editor extends Vue {
-  private sites: any = [{ name: "127.0.0.1", active: true }];
+  private sites: any = store.state.sites;
+
   private showCreateSiteModal: boolean = false;
   private newSiteName: string = "";
 
@@ -69,7 +71,7 @@ export default class Editor extends Vue {
       if (this.sites.filter((i: any) => i.name === name).length === 0) {
         this.sites.map((i: any) => (i.active = false));
 
-        this.sites.push({
+        store.commit("addSite", {
           name,
           active: true
         });

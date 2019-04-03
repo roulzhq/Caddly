@@ -41,8 +41,6 @@ import draggable from "vuedraggable";
   }
 })
 export default class Site extends Vue {
-  @Prop() private title!: string;
-
   private labels: any = [];
   private directives: any = [];
 
