@@ -11,7 +11,7 @@
     <div class="App-container">
       <Editor></Editor>
       <Sidebar></Sidebar>
-      <Nav></Nav>
+      <Nav :onExportButtonClick="onExportButtonClick"></Nav>
     </div>
   </div>
 </template>
@@ -21,6 +21,7 @@ import { Component, Vue } from "vue-property-decorator";
 import Editor from "./components/Editor.vue";
 import Sidebar from "./components/Sidebar.vue";
 import Nav from "./components/Nav.vue";
+import store from './store';
 
 @Component({
   components: {
@@ -29,7 +30,11 @@ import Nav from "./components/Nav.vue";
     Nav
   }
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  private onExportButtonClick() {
+    window.console.log(store.state.sites);
+  }
+}
 </script>
 
 <style lang='less'>
@@ -148,6 +153,7 @@ a {
   border-bottom: 1px solid #dbdbdb;
   background: #ffffff;
   position: relative;
+  cursor: crosshair;
 
   .directive-name {
     font-weight: bold;
