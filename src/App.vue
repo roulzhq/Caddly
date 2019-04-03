@@ -263,8 +263,23 @@ a {
 }
 
 @media only screen and (max-width: 750px) {
+  .directives {
+    overflow-x: hidden;
+  }
+
   .directive {
     display: inline-block;
+    width: 93%;
+    margin: 10px 0;
+    padding: 8px;
+
+    .directive-argument {
+      width: 118px;
+    }
+
+    .directive-property {
+      width: 316px;
+    }
   }
 }
 
