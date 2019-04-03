@@ -127,4 +127,10 @@ export default class Editor extends Vue {
     }
   }
 }
+
+@media only screen and (max-width: 750px) {
+  .Editor {
+    box-shadow: none;
+  }
+}
 </style>

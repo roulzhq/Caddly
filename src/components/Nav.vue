@@ -1,9 +1,8 @@
 <template>
   <div class="Nav">
     <a class="Nav-link Nav-link_primary" @click="onExportButtonClick()">Export</a>
-    <a class="Nav-link Nav-link_primary">Copy to clipboard</a>
+    <a class="Nav-link Nav-link_primary no-mobile">Copy to clipboard</a>
     <a class="Nav-link">Help</a>
-    <a class="Nav-link">Report a bug</a>
     <a class="Nav-link" href="https://caddyserver.com/docs" target="_blank">Caddy Documentation</a>
   </div>
 </template>
@@ -25,27 +24,43 @@ export default class Nav extends Vue {
   line-height: 80px;
   text-align: center;
   margin: 10px;
+
+  .Nav-link {
+    padding: 16px;
+    margin: 10px;
+    font-size: 1em;
+    transition: 0.1s all cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .Nav-link_primary {
+    color: #2962ff;
+    border: 2px solid #2962ff;
+  }
+
+  .Nav-link_primary:hover {
+    color: #fafafa;
+    border: 2px solid transparent;
+    background: #448aff;
+    background: -moz-linear-gradient(45deg, #448aff 0%, #2962ff 100%);
+    background: -webkit-linear-gradient(45deg, #448aff 0%, #2962ff 100%);
+    background: linear-gradient(45deg, #448aff 0%, #2962ff 100%);
+    text-decoration: none;
+  }
 }
 
-.Nav-link {
-  padding: 16px;
-  margin: 10px;
-  font-size: 1em;
-  transition: 0.1s all cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
+@media only screen and (max-width: 750px) {
+  .Nav {
+    box-shadow: none;
+    margin: 0;
 
-.Nav-link_primary {
-  color: #2962ff;
-  border: 2px solid #2962ff;
-}
+    .Nav-link {
+      padding: 8px;
+      margin: 5px;
+    }
 
-.Nav-link_primary:hover {
-  color: #fafafa;
-  border: 2px solid transparent;
-  background: #448aff;
-  background: -moz-linear-gradient(45deg, #448aff 0%, #2962ff 100%);
-  background: -webkit-linear-gradient(45deg, #448aff 0%, #2962ff 100%);
-  background: linear-gradient(45deg, #448aff 0%, #2962ff 100%);
-  text-decoration: none;
+    .no-mobile {
+      display: none;
+    }
+  }
 }
 </style>

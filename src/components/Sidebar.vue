@@ -48,4 +48,10 @@ export default class Sidebar extends Vue {
     position: absolute;
   }
 }
+
+@media only screen and (max-width: 750px) {
+  .Sidebar {
+    box-shadow: none;
+  }
+}
 </style>

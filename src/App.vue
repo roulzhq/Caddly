@@ -21,7 +21,7 @@ import { Component, Vue } from "vue-property-decorator";
 import Editor from "./components/Editor.vue";
 import Sidebar from "./components/Sidebar.vue";
 import Nav from "./components/Nav.vue";
-import store from './store';
+import store from "./store";
 
 @Component({
   components: {
@@ -47,6 +47,12 @@ body {
   background: -webkit-linear-gradient(45deg, #448aff 0%, #2962ff 100%);
   background: linear-gradient(45deg, #448aff 0%, #2962ff 100%);
   overflow: hidden;
+}
+
+@media only screen and (max-width: 750px) {
+  body {
+    padding: 0;
+  }
 }
 
 *::-moz-selection {
@@ -106,6 +112,22 @@ body {
     }
   }
 
+  @media only screen and (max-width: 750px) {
+    .App-heading {
+      align-items: center;
+      justify-content: center;
+      display: flex;
+
+      h2 {
+        display: none;
+      }
+
+      .App-heading-caddyVersion {
+        display: none;
+      }
+    }
+  }
+
   .App-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -131,6 +153,27 @@ body {
       grid-area: sidebar;
     }
   }
+
+  @media only screen and (max-width: 750px) {
+    .App-container {
+      grid-template-areas:
+        "editor editor editor editor"
+        "editor editor editor editor"
+        "sidebar sidebar sidebar sidebar"
+        "nav nav nav nav";
+      grid-template-rows: auto auto 150px 80px;
+      grid-gap: 5px;
+      bottom: 0;
+      position: absolute;
+      height: 93vh;
+    }
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  #App {
+    width: 100vw;
+  }
 }
 
 a {
@@ -144,7 +187,7 @@ a {
   width: 100%;
   height: calc(100% - 74px);
   position: absolute;
-  overflow-y: scroll;  
+  overflow-y: scroll;
 }
 
 .directive {
@@ -216,6 +259,12 @@ a {
     display: inline-block;
     vertical-align: middle;
     cursor: pointer;
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .directive {
+    display: inline-block;
   }
 }
 
