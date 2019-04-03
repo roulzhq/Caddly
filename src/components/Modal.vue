@@ -75,7 +75,6 @@ export default class Modal extends Vue {
 
     .Modal-center-content {
       padding: 20px;
-      width: 100%;
       height: calc(100% - 35px);
     }
   }

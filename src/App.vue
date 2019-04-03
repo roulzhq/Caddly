@@ -13,6 +13,22 @@
       <Sidebar></Sidebar>
       <Nav :onExportButtonClick="onExportButtonClick"></Nav>
     </div>
+
+    <div v-if="showAlphaWarning">
+      <Modal title="Welcome to Caddly ALPHA" :onClose="closeAlphaWarning">
+        <div>
+          <h4>Easily build caddyfiles with Caddly.</h4>
+          <p>
+            <b>However...</b> Caddly is stil in alpha.
+            <br>There may be some bugs in this application at the moment.
+          </p>
+          <p>
+            The exported Caddyfiles are not guaranteed to be correct
+            <br>and might need to be modified manually.
+          </p>
+        </div>
+      </Modal>
+    </div>
   </div>
 </template>
 
@@ -21,16 +37,24 @@ import { Component, Vue } from "vue-property-decorator";
 import Editor from "./components/Editor.vue";
 import Sidebar from "./components/Sidebar.vue";
 import Nav from "./components/Nav.vue";
+import Modal from "./components/Modal.vue";
 import store from "./store";
 
 @Component({
   components: {
     Editor,
     Sidebar,
-    Nav
+    Nav,
+    Modal
   }
 })
 export default class App extends Vue {
+  private showAlphaWarning: boolean = true;
+
+  private closeAlphaWarning() {
+    this.showAlphaWarning = false;
+  }
+
   private onExportButtonClick() {
     window.console.log(store.state.sites);
   }
