@@ -225,11 +225,18 @@ let store: StoreType = {
         arguments: [{ name: "[path]", value: "" }, { name: "command", value: "" }]
       }
     ],
-    sites: [{ name: "127.0.0.1", active: true }]
+    sites: [{ name: "127.0.0.1", active: true, directives: [] }]
   },
   mutations: {
     addSite(state: any, site: any) {
       state.sites.push(site);
+    },
+    removeDirective(state: any, payload: any) {
+      state.sites = state.sites.map((i: any) => {
+        if (payload.name === i.name) {
+          return i.directives.splice(payload.directive, 1);
+        }
+      });
     }
   },
   actions: {

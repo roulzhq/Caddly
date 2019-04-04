@@ -107,6 +107,7 @@ export default class Editor extends Vue {
       .Editor-sites-header-tab {
         display: inline;
         padding: 10px;
+        cursor: pointer;
       }
 
       .active {
