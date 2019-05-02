@@ -112,9 +112,9 @@ export default class App extends Vue {
       name: "gzip",
       properties: [
         { name: "ext", placeholder: "extensions...", value: "" },
-        { name: "not", placeholder: "paths",value: "" },
-        { name: "level", placeholder: "compression_level",value: "" },
-        { name: "min_length", placeholder: "min_bytes",value: "" }
+        { name: "not", placeholder: "paths", value: "" },
+        { name: "level", placeholder: "compression_level", value: "" },
+        { name: "min_length", placeholder: "min_bytes", value: "" }
       ]
     },
     {
@@ -282,7 +282,8 @@ export default class App extends Vue {
   }
 
   private onExportButtonClick() {
-    console.log(JSON.stringify(this.sites));
+    alert("Not implemented yet");
+    // Needs to parse the sites and export the caddyfile
   }
 
   private setActiveSite(name: string) {
