@@ -14,12 +14,16 @@
       </div>
       <div class="Editor-sites-container">
         <keep-alive>
-          <Site v-for="site in activeSites" :key="site.name"></Site>
+          <Site
+            v-for="site in activeSite"
+            :key="site.name"
+            :directives="siteDirective"
+          ></Site>
         </keep-alive>
       </div>
     </div>
     <div v-if="showCreateSiteModal">
-      <Modal type="input" :onClose="createSite" title="Create a new Site">
+      <Modal type="input" :onClose="handleCreateSite" title="Create a new Site">
         <div
           class="Editor-sites-new-modal"
           style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column;"
@@ -27,7 +31,7 @@
           <div>
             <label style="display: block;">Name</label>
             <input type="text" v-model="newSiteName">
-            <button @click="createSite(newSiteName)">Create</button>
+            <button @click="handleCreateSite(newSiteName)">Create</button>
           </div>
         </div>
       </Modal>
@@ -41,7 +45,6 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import Heading from "./Heading.vue";
 import Site from "./Site.vue";
 import Modal from "./Modal.vue";
-import store from "../store";
 
 @Component({
   components: {
@@ -51,41 +54,32 @@ import store from "../store";
   }
 })
 export default class Editor extends Vue {
-  private sites: any = store.state.sites;
+  @Prop() private setActiveSite: any;
+  @Prop() private createSite: any;
+  @Prop() private sites: any;
+  @Prop() private activeSite: any;
+  @Prop() private addDirectiveToSite: any;
 
   private showCreateSiteModal: boolean = false;
   private newSiteName: string = "";
-
-  private setActiveSite(name: string) {
-    this.sites = this.sites.map((i: any) =>
-      i.name === name ? { ...i, active: true } : { ...i, active: false }
-    );
-  }
 
   private showSiteModal() {
     this.showCreateSiteModal = true;
   }
 
-  private createSite(name: string) {
-    if (name) {
-      if (this.sites.filter((i: any) => i.name === name).length === 0) {
-        this.sites.map((i: any) => (i.active = false));
+  private handleCreateSite(name: string) {
+    this.showCreateSiteModal = false;
+    this.newSiteName = "";
 
-        store.commit("addSite", {
-          name,
-          active: true
-        });
-        this.showCreateSiteModal = false;
-        this.newSiteName = "";
-      }
-      this.showCreateSiteModal = false;
-    } else {
-      this.showCreateSiteModal = false;
-    }
+    this.createSite(name);
   }
 
-  get activeSites() {
-    return this.sites.filter((i: any) => i.active);
+  get siteDirective() {
+    return this.activeSite.directives;
+  }
+
+  set siteDirective(directive: any) {
+    this.addDirectiveToSite(this.activeSite.name, directive);
   }
 }
 </script>
