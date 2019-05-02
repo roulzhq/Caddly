@@ -1,29 +1,8 @@
-# caddly
+# Caddly - Easy Caddyfile editing
+### Caddly let's you interactively create [Caddyfiles](https://caddyserver.com/tutorial/caddyfile).
 
-## Project setup
-```
-npm install
-```
+Even though Caddyfiles have an easy Syntax and are supported in a lot of IDEs and Editors, We thought about how nice it would be to create a server config without having to think about syntax, looking up directives and more.
+With Caddly, you can just drag and drop the required directives, configure them (properties just need to be filled) and export them in minutes.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Caddly is still under development.
+At the moment, you cannot export files and there are some known bugs. Because of this, there is no Version live yet. However, feel free to contribute! This project is completely open and just to make the lives of Caddy-users easier.
