@@ -22,7 +22,6 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import draggable from "vuedraggable";
 
 import Heading from "./Heading.vue";
-import store from "../store";
 
 @Component({
   components: {
@@ -31,7 +30,7 @@ import store from "../store";
   }
 })
 export default class Sidebar extends Vue {
-  private directives: any = store.state.directives;
+  @Prop() private directives: any;
 }
 </script>
 
