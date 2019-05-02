@@ -41,8 +41,7 @@ import draggable from "vuedraggable";
   }
 })
 export default class Site extends Vue {
-  private labels: any = [];
-  private directives: any = [];
+  @Prop() private directives: any;
 
   private clonedDirective(e: any) {
     if (e.added) {
