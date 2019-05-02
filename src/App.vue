@@ -111,20 +111,20 @@ export default class App extends Vue {
     {
       name: "gzip",
       properties: [
-        { name: "ext", value: "" },
-        { name: "not", value: "" },
-        { name: "level", value: "" },
-        { name: "min_length", value: "" }
+        { name: "ext", placeholder: "extensions...", value: "" },
+        { name: "not", placeholder: "paths",value: "" },
+        { name: "level", placeholder: "compression_level",value: "" },
+        { name: "min_length", placeholder: "min_bytes",value: "" }
       ]
     },
     {
       name: "header",
       arguments: [{ name: "path", value: "" }],
       properties: [
-        { name: "name", placeholder: "value", value: "" },
-        { name: "name", placeholder: "value", value: "" },
-        { name: "name", placeholder: "value", value: "" },
-        { name: "name", placeholder: "value", value: "" }
+        { name: "name 1", placeholder: "value", value: "" },
+        { name: "name 2", placeholder: "value", value: "" },
+        { name: "name 3", placeholder: "value", value: "" },
+        { name: "name 4", placeholder: "value", value: "" }
       ]
     },
     { name: "import", arguments: [{ name: "pattern", value: "" }] },
@@ -169,9 +169,9 @@ export default class App extends Vue {
       name: "mime",
       arguments: [],
       properties: [
-        { name: "ext", placeholder: "type", value: "" },
-        { name: "ext", placeholder: "type", value: "" },
-        { name: "ext", placeholder: "type", value: "" }
+        { name: "ext 1", placeholder: "type", value: "" },
+        { name: "ext 2", placeholder: "type", value: "" },
+        { name: "ext 3", placeholder: "type", value: "" }
       ]
     },
     {
@@ -282,7 +282,7 @@ export default class App extends Vue {
   }
 
   private onExportButtonClick() {
-    console.log(this.sites);
+    console.log(JSON.stringify(this.sites));
   }
 
   private setActiveSite(name: string) {
@@ -295,7 +295,7 @@ export default class App extends Vue {
     if (name) {
       if (this.sites.filter((i: any) => i.name === name).length === 0) {
         this.sites.map((i: any) => (i.active = false));
-        
+
         this.sites.push({
           name,
           directives: [],
