@@ -16,7 +16,7 @@
         :createSite="createSite"
       ></Editor>
       <Sidebar :directives="this.directives"></Sidebar>
-      <Nav :onExportButtonClick="onExportButtonClick"></Nav>
+      <Nav :onExportButtonClick="onExportButtonClick" :onCopyButtonClick="onCopyButtonClick"></Nav>
     </div>
 
     <div v-if="showAlphaWarning">
@@ -33,7 +33,10 @@
           </p>
           <p>
             Feel free to contribute, or look at some known bugs at
-            <a href="https://github.com/roulzhq/Caddly" target="_blank">https://github.com/roulzhq/Caddly</a>
+            <a
+              href="https://github.com/roulzhq/Caddly"
+              target="_blank"
+            >https://github.com/roulzhq/Caddly</a>
           </p>
           <p></p>
         </div>
@@ -329,21 +332,33 @@ export default class App extends Vue {
     this.showAlphaWarning = false;
   }
 
-  private onExportButtonClick() {
+  private onExportButtonClick(e: Event) {
     const caddyfile = jsonToCaddyfile(this.sites);
 
-    let blob = new Blob([caddyfile], { type: "application/octet-binary;charset=utf-8" });
-    let downloadUrl = URL.createObjectURL(blob);
+    const blob = new Blob([caddyfile], {
+      type: "application/octet-binary;charset=utf-8"
+    });
 
-    let a: HTMLAnchorElement = document.createElement("a");
-    document.body.appendChild(a);
-    a.style.display = "none";
+    const el: HTMLAnchorElement = document.createElement("a");
+    document.body.appendChild(el);
+    el.style.display = "none";
 
-    let url = window.URL.createObjectURL(blob);
-    a.href = url;
-    a.download = "Caddyfile";
-    a.click();
+    const url = window.URL.createObjectURL(blob);
+    el.href = url;
+    el.download = "Caddyfile";
+    el.click();
     window.URL.revokeObjectURL(url);
+  }
+
+  private onCopyButtonClick(e: Event) {
+    const caddyfile = jsonToCaddyfile(this.sites);
+
+    const el: HTMLTextAreaElement = document.createElement("textarea");
+    el.value = caddyfile;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
   }
 
   private setActiveSite(name: string) {
