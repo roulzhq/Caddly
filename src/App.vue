@@ -31,6 +31,11 @@
             The exported Caddyfiles are not guaranteed to be correct
             <br>and might need to be modified manually.
           </p>
+          <p>
+            Feel free to contribute, or look at some known bugs at
+            <a href="https://github.com/roulzhq/Caddly" target="_blank">https://github.com/roulzhq/Caddly</a>
+          </p>
+          <p></p>
         </div>
       </Modal>
     </div>
@@ -44,6 +49,14 @@ import Sidebar from "./components/Sidebar.vue";
 import Nav from "./components/Nav.vue";
 import Modal from "./components/Modal.vue";
 
+import { jsonToCaddyfile } from "./parser";
+
+interface Site {
+  name: string;
+  directives: any[];
+  active?: boolean;
+}
+
 @Component({
   components: {
     Editor,
@@ -54,7 +67,7 @@ import Modal from "./components/Modal.vue";
 })
 export default class App extends Vue {
   private showAlphaWarning: boolean = true;
-  private sites: any = [{ name: "127.0.0.1", active: true, directives: [] }];
+  private sites: Site[] = [{ name: "127.0.0.1", active: true, directives: [] }];
   private directives: any = [
     {
       name: "basicauth",
@@ -67,13 +80,14 @@ export default class App extends Vue {
         { name: "resources", placeholder: "list", value: "" }
       ]
     },
-    { name: "bind", arguments: [{ name: "host", value: "" }] },
+    { name: "bind", arguments: [{ name: "host", value: "" }], properties: [] },
     {
       name: "browse",
       arguments: [
         { name: "[path]", value: "" },
         { name: "[tplfile]", value: "" }
-      ]
+      ],
+      properties: []
     },
     {
       name: "errors",
@@ -86,8 +100,16 @@ export default class App extends Vue {
         { name: "rotate_compress", placeholder: "true/false", value: "" }
       ]
     },
-    { name: "expvar", arguments: [{ name: "path", value: "" }] },
-    { name: "ext", arguments: [{ name: "extensions...", value: "" }] },
+    {
+      name: "expvar",
+      arguments: [{ name: "path", value: "" }],
+      properties: []
+    },
+    {
+      name: "ext",
+      arguments: [{ name: "extensions...", value: "" }],
+      properties: []
+    },
     {
       name: "fastcgi",
       arguments: [
@@ -110,6 +132,7 @@ export default class App extends Vue {
     },
     {
       name: "gzip",
+      arguments: [],
       properties: [
         { name: "ext", placeholder: "extensions...", value: "" },
         { name: "not", placeholder: "paths", value: "" },
@@ -127,9 +150,21 @@ export default class App extends Vue {
         { name: "name 4", placeholder: "value", value: "" }
       ]
     },
-    { name: "import", arguments: [{ name: "pattern", value: "" }] },
-    { name: "index", arguments: [{ name: "filenames...", value: "" }] },
-    { name: "internal", arguments: [{ name: "path", value: "" }] },
+    {
+      name: "import",
+      arguments: [{ name: "pattern", value: "" }],
+      properties: []
+    },
+    {
+      name: "index",
+      arguments: [{ name: "filenames...", value: "" }],
+      properties: []
+    },
+    {
+      name: "internal",
+      arguments: [{ name: "path", value: "" }],
+      properties: []
+    },
     {
       name: "limits",
       arguments: [],
@@ -176,9 +211,10 @@ export default class App extends Vue {
     },
     {
       name: "on",
-      arguments: [{ name: "event", value: "" }, { name: "command", value: "" }]
+      arguments: [{ name: "event", value: "" }, { name: "command", value: "" }],
+      properties: []
     },
-    { name: "pprof", arguments: [] },
+    { name: "pprof", arguments: [], properties: [] },
     {
       name: "proxy",
       arguments: [{ name: "from", value: "" }, { name: "to", value: "" }],
@@ -232,21 +268,28 @@ export default class App extends Vue {
         { name: "from", value: "" },
         { name: "to", value: "" },
         { name: "[code]", value: "" }
-      ]
+      ],
+      properties: []
     },
-    { name: "request_id", arguments: [{ name: "[header_field]", value: "" }] },
+    {
+      name: "request_id",
+      arguments: [{ name: "[header_field]", value: "" }],
+      properties: []
+    },
     {
       name: "rewrite",
       arguments: [
         { name: "[not]", value: "" },
         { name: "from", value: "" },
         { name: "to", value: "" }
-      ]
+      ],
+      properties: []
     },
-    { name: "root", arguments: [{ name: "path", value: "" }] },
+    { name: "root", arguments: [{ name: "path", value: "" }], properties: [] },
     {
       name: "status",
-      arguments: [{ name: "code", value: "" }, { name: "path", value: "" }]
+      arguments: [{ name: "code", value: "" }, { name: "path", value: "" }],
+      properties: []
     },
     {
       name: "templates",
@@ -269,11 +312,16 @@ export default class App extends Vue {
     },
     {
       name: "tls",
-      arguments: [{ name: "of/email/self_signed/cert key", value: "" }]
+      arguments: [{ name: "of/email/self_signed/cert key", value: "" }],
+      properties: []
     },
     {
       name: "websocket",
-      arguments: [{ name: "[path]", value: "" }, { name: "command", value: "" }]
+      arguments: [
+        { name: "[path]", value: "" },
+        { name: "command", value: "" }
+      ],
+      properties: []
     }
   ];
 
@@ -282,8 +330,20 @@ export default class App extends Vue {
   }
 
   private onExportButtonClick() {
-    alert("Not implemented yet");
-    // Needs to parse the sites and export the caddyfile
+    const caddyfile = jsonToCaddyfile(this.sites);
+
+    let blob = new Blob([caddyfile], { type: "application/octet-binary;charset=utf-8" });
+    let downloadUrl = URL.createObjectURL(blob);
+
+    let a: HTMLAnchorElement = document.createElement("a");
+    document.body.appendChild(a);
+    a.style.display = "none";
+
+    let url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = "Caddyfile";
+    a.click();
+    window.URL.revokeObjectURL(url);
   }
 
   private setActiveSite(name: string) {
