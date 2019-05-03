@@ -1,4 +1,4 @@
-# Caddly 0.1.1 - Easy Caddyfile editing
+# Caddly - Easy Caddyfile editing
 ### Caddly let's you interactively create [Caddyfiles](https://caddyserver.com/tutorial/caddyfile).
 ![Caddly Website](https://i.imgur.com/brvYYl9.png)
 
