@@ -24,13 +24,10 @@
     </div>
     <div v-if="showCreateSiteModal">
       <Modal type="input" :onClose="handleCreateSite" title="Create a new Site">
-        <div
-          class="Editor-sites-new-modal"
-          style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column;"
-        >
+        <div class="Editor-sites-new-modal">
           <div>
             <label style="display: block;">Name</label>
-            <input type="text" v-model="newSiteName">
+            <input type="text" v-model="newSiteName" placeholder="Space-seperated list" />
             <button @click="handleCreateSite(newSiteName)">Create</button>
           </div>
         </div>

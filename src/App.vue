@@ -693,7 +693,7 @@ button {
   padding: 5px 10px;
   border: none;
   outline: none;
-  margin: 8px;
+  margin: 8px 8px 8px 0;
   display: inline-block;
   color: #ffffff;
   background: #2962ff;
