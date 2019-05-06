@@ -39,5 +39,7 @@ export function jsonToCaddyfile(input: Site[]): string {
         caddyfile += siteString;
     }
 
+    caddyfile = caddyfile.slice(0, -2);
+
     return caddyfile;
 }
