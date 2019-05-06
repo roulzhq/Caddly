@@ -4,7 +4,7 @@ interface Site {
     active?: boolean;
 }
 
-export function jsonToCaddyfile(input: Site[]): string {
+export function jsonToCaddyfile(input: Site[], spacing: string): string {
     let caddyfile = "";
 
     for (const site of input) {
@@ -12,7 +12,7 @@ export function jsonToCaddyfile(input: Site[]): string {
 
 
         for (const directive of site.directives) {
-            let directiveString = "\n\t" + directive.name;
+            let directiveString = "\n" + spacing + directive.name;
             let propString = "";
 
             // Loop through every argument that is filled out
@@ -22,12 +22,12 @@ export function jsonToCaddyfile(input: Site[]): string {
 
             // Loop through every property that is filled out
             for (const prop of directive.properties.filter((i: any) => i.value !== "")) {
-                propString += "\t\t" + prop.name + " " + prop.value + "\n";
+                propString += spacing + spacing + prop.name + " " + prop.value + "\n";
             }
 
             // If a property is set for a given argument,
             if (propString !== "") {
-                propString = " {\n" + propString + "\t}";
+                propString = " {\n" + propString + spacing + "}";
             }
 
             directiveString += propString;
