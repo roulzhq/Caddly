@@ -16,7 +16,7 @@
         :createSite="createSite"
       ></Editor>
       <Sidebar :directives="this.directives"></Sidebar>
-      <Nav :onExportButtonClick="onExportButtonClick" :onCopyButtonClick="onCopyButtonClick"></Nav>
+      <Nav :onExportButtonClick="onExportButtonClick"></Nav>
     </div>
 
     <div v-if="showAlphaWarning">
@@ -42,6 +42,37 @@
         </div>
       </Modal>
     </div>
+    <Modal
+      type="input"
+      :onClose="() => showExportDialog = false"
+      title="Export Caddyfile"
+      v-if="showExportDialog"
+    >
+      <div class="Editor-sites-new-modal">
+        <div>
+          <label>Indent using:</label>
+          <select v-model="spacing" @change="onExportButtonClick">
+            <option :value="'\t'">Tabs</option>
+            <option :value="'  '">Spaces</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Preview and Edit</label>
+          <textarea v-model="caddyfile"></textarea>
+        </div>
+
+        <div>
+          <label>Filename</label>
+          <input type="text" v-model="exportFileName">
+        </div>
+
+        <div>
+          <button @click="exportFile()">Save as file</button>
+          <button @click="copyFile()">Copy to clipboard</button>
+        </div>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -69,7 +100,13 @@ interface Site {
   }
 })
 export default class App extends Vue {
+  private exportFileName = "Caddyfile";
+  private caddyfile = "";
+  private spacing = "\t";
+
   private showAlphaWarning: boolean = true;
+  private showExportDialog: boolean = false;
+
   private sites: Site[] = [{ name: "127.0.0.1", active: true, directives: [] }];
   private directives: any = [
     {
@@ -333,32 +370,8 @@ export default class App extends Vue {
   }
 
   private onExportButtonClick(e: Event) {
-    const caddyfile = jsonToCaddyfile(this.sites);
-
-    const blob = new Blob([caddyfile], {
-      type: "application/octet-binary;charset=utf-8"
-    });
-
-    const el: HTMLAnchorElement = document.createElement("a");
-    document.body.appendChild(el);
-    el.style.display = "none";
-
-    const url = window.URL.createObjectURL(blob);
-    el.href = url;
-    el.download = "Caddyfile";
-    el.click();
-    window.URL.revokeObjectURL(url);
-  }
-
-  private onCopyButtonClick(e: Event) {
-    const caddyfile = jsonToCaddyfile(this.sites);
-
-    const el: HTMLTextAreaElement = document.createElement("textarea");
-    el.value = caddyfile;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand("copy");
-    document.body.removeChild(el);
+    this.caddyfile = jsonToCaddyfile(this.sites, this.spacing);
+    this.showExportDialog = true;
   }
 
   private setActiveSite(name: string) {
@@ -393,6 +406,31 @@ export default class App extends Vue {
 
   get activeSite() {
     return this.sites.filter((i: any) => i.active)[0];
+  }
+
+  private exportFile() {
+    const blob = new Blob([this.caddyfile], {
+      type: "application/octet-binary;charset=utf-8"
+    });
+
+    const el: HTMLAnchorElement = document.createElement("a");
+    document.body.appendChild(el);
+    el.style.display = "none";
+
+    const url = window.URL.createObjectURL(blob);
+    el.href = url;
+    el.download = this.exportFileName;
+    el.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  private copyFile() {
+    const el: HTMLTextAreaElement = document.createElement("textarea");
+    el.value = this.caddyfile;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
   }
 }
 </script>
@@ -643,8 +681,10 @@ a {
   }
 }
 
-input {
-  padding: 5px 10px;
+input,
+textarea,
+select {
+  padding: 5px 0 5px 10px;
   border: none;
   outline: none;
 }
@@ -663,5 +703,28 @@ button {
 
 button:hover {
   background: #448aff;
+}
+
+.Editor-sites-new-modal {
+  width: 100%;
+  height: 100%;
+  text-align: left;
+
+  label,
+  input {
+    display: block;
+    width: 100%;
+  }
+
+  textarea {
+    width: 100%;
+    max-width: 100%;
+    height: 200px;
+    max-height: 400px;
+  }
+
+  div {
+    margin: 10px 0;
+  }
 }
 </style>

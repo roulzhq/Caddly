@@ -1,7 +1,6 @@
 <template>
   <div class="Nav">
     <a class="Nav-link Nav-link_primary" @click="onExportButtonClick()">Export</a>
-    <a class="Nav-link Nav-link_primary no-mobile" @click="onCopyButtonClick()">Copy to clipboard</a>
     <a class="Nav-link">Help (soon)</a>
     <a class="Nav-link" href="https://caddyserver.com/docs" target="_blank">Caddy Documentation</a>
   </div>
@@ -13,7 +12,6 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 @Component
 export default class Nav extends Vue {
   @Prop() private onExportButtonClick!: any;
-  @Prop() private onCopyButtonClick!: any;
 }
 </script>
 
