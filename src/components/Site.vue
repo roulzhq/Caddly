@@ -12,6 +12,7 @@
             :placeholder="argument.name"
             v-model="argument.value"
             class="directive-argument"
+            :required="argument.required"
           >
         </div>
 
@@ -22,7 +23,7 @@
             class="directive-property"
           >
             <label>{{ property.name }}</label>
-            <input type="text" v-model="property.value" :placeholder="property.placeholder">
+            <input type="text" v-model="property.value" :placeholder="property.placeholder" :required="property.required">
           </div>
         </div>
       </div>
