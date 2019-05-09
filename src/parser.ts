@@ -12,7 +12,8 @@ export function jsonToCaddyfile(input: Site[], spacing: string): string {
 
 
         for (const directive of site.directives) {
-            let directiveString = "\n" + spacing + directive.name;
+            // The regex matches anything before a "." and removes it (including the dot). (Remove http prefix etc.)
+            let directiveString = "\n" + spacing + directive.name.replace(/.+?\./gi, "");
             let propString = "";
 
             // Loop through every argument that is filled out
