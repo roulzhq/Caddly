@@ -91,6 +91,13 @@ interface Site {
   active?: boolean;
 }
 
+interface Directive {
+  name: string;
+  type: "standard" | "middleware";
+  arguments?: object[];
+  properties?: object[];
+}
+
 @Component({
   components: {
     Editor,
@@ -108,260 +115,750 @@ export default class App extends Vue {
   private showExportDialog: boolean = false;
 
   private sites: Site[] = [{ name: "127.0.0.1", active: true, directives: [] }];
-  private directives: any = [
+  private directives: Directive[] = [
     {
       name: "basicauth",
+      type: "standard",
       arguments: [
-        { name: "username", value: "" },
-        { name: "password", value: "" }
+        { name: "username", value: "", required: true },
+        { name: "password", value: "", required: true }
       ],
       properties: [
-        { name: "realm", placeholder: "name", value: "" },
-        { name: "resources", placeholder: "list", value: "" }
+        { name: "realm", placeholder: "name", value: "", required: false },
+        { name: "resources", placeholder: "list", value: "", required: false }
       ]
     },
-    { name: "bind", arguments: [{ name: "host", value: "" }], properties: [] },
+    {
+      name: "bind",
+      type: "standard",
+      arguments: [{ name: "host", value: "", required: true }],
+      properties: []
+    },
     {
       name: "browse",
+      type: "standard",
       arguments: [
-        { name: "[path]", value: "" },
-        { name: "[tplfile]", value: "" }
+        { name: "[path]", value: "", required: false },
+        { name: "[tplfile]", value: "", required: false }
       ],
       properties: []
     },
     {
       name: "errors",
-      arguments: [{ name: "logfile", value: "" }],
+      type: "standard",
+      arguments: [{ name: "[logfile]", value: "", required: false }],
       properties: [
-        { name: "code", placeholder: "file", value: "" },
-        { name: "rotate_size", placeholder: "mb", value: "" },
-        { name: "rotate_age", placeholder: "days", value: "" },
-        { name: "rotate_keep", placeholder: "count", value: "" },
-        { name: "rotate_compress", placeholder: "true/false", value: "" }
+        { name: "code", placeholder: "file", value: "", required: false },
+        { name: "rotate_size", placeholder: "mb", value: "", required: false },
+        { name: "rotate_age", placeholder: "days", value: "", required: false },
+        {
+          name: "rotate_keep",
+          placeholder: "count",
+          value: "",
+          required: false
+        },
+        {
+          name: "rotate_compress",
+          placeholder: "true/false",
+          value: "",
+          required: false
+        }
       ]
     },
     {
       name: "expvar",
-      arguments: [{ name: "path", value: "" }],
+      type: "standard",
+      arguments: [{ name: "[path]", value: "", required: false }],
       properties: []
     },
     {
       name: "ext",
-      arguments: [{ name: "extensions...", value: "" }],
+      type: "standard",
+      arguments: [{ name: "extensions...", value: "", required: true }],
       properties: []
     },
     {
       name: "fastcgi",
+      type: "standard",
       arguments: [
-        { name: "path", value: "" },
-        { name: "endpoint", value: "" },
-        { name: "[preset]", value: "" }
+        { name: "path", value: "", required: false },
+        { name: "endpoint", value: "", required: false },
+        { name: "[preset]", value: "", required: true }
       ],
       properties: [
-        { name: "root", placeholder: "directory", value: "" },
-        { name: "ext", placeholder: "extension", value: "" },
-        { name: "split", placeholder: "splitval", value: "" },
-        { name: "index", placeholder: "indexfile", value: "" },
-        { name: "env", placeholder: "key value", value: "" },
-        { name: "except", placeholder: "ignored_paths...", value: "" },
-        { name: "upstream", placeholder: "endpoint", value: "" },
-        { name: "connect_timeout", placeholder: "duration", value: "" },
-        { name: "read_timeout", placeholder: "duration", value: "" },
-        { name: "send_timeout", placeholder: "duration", value: "" }
+        { name: "root", placeholder: "directory", value: "", required: false },
+        { name: "ext", placeholder: "extension", value: "", required: false },
+        { name: "split", placeholder: "splitval", value: "", required: false },
+        { name: "index", placeholder: "indexfile", value: "", required: false },
+        { name: "env", placeholder: "key value", value: "", required: false },
+        {
+          name: "except",
+          placeholder: "ignored_paths...",
+          value: "",
+          required: false
+        },
+        {
+          name: "upstream",
+          placeholder: "endpoint",
+          value: "",
+          required: false
+        },
+        {
+          name: "connect_timeout",
+          placeholder: "duration",
+          value: "",
+          required: false
+        },
+        {
+          name: "read_timeout",
+          placeholder: "duration",
+          value: "",
+          required: false
+        },
+        {
+          name: "send_timeout",
+          placeholder: "duration",
+          value: "",
+          required: false
+        }
       ]
     },
     {
       name: "gzip",
+      type: "standard",
       arguments: [],
       properties: [
-        { name: "ext", placeholder: "extensions...", value: "" },
-        { name: "not", placeholder: "paths", value: "" },
-        { name: "level", placeholder: "compression_level", value: "" },
-        { name: "min_length", placeholder: "min_bytes", value: "" }
+        {
+          name: "ext",
+          placeholder: "extensions...",
+          value: "",
+          required: false
+        },
+        { name: "not", placeholder: "paths", value: "", required: false },
+        {
+          name: "level",
+          placeholder: "compression_level",
+          value: "",
+          required: false
+        },
+        {
+          name: "min_length",
+          placeholder: "min_bytes",
+          value: "",
+          required: false
+        }
       ]
     },
     {
       name: "header",
-      arguments: [{ name: "path", value: "" }],
+      type: "standard",
+      arguments: [{ name: "path", value: "", required: true }],
       properties: [
-        { name: "name 1", placeholder: "value", value: "" },
-        { name: "name 2", placeholder: "value", value: "" },
-        { name: "name 3", placeholder: "value", value: "" },
-        { name: "name 4", placeholder: "value", value: "" }
+        { name: "", placeholder: "value", value: "", required: false },
+        { name: "", placeholder: "value", value: "", required: false },
+        { name: "", placeholder: "value", value: "", required: false },
+        { name: "", placeholder: "value", value: "", required: false }
       ]
     },
     {
       name: "import",
-      arguments: [{ name: "pattern", value: "" }],
+      type: "standard",
+      arguments: [{ name: "pattern", value: "", required: true }],
       properties: []
     },
     {
       name: "index",
-      arguments: [{ name: "filenames...", value: "" }],
+      type: "standard",
+      arguments: [{ name: "filenames...", value: "", required: true }],
       properties: []
     },
     {
       name: "internal",
-      arguments: [{ name: "path", value: "" }],
+      type: "standard",
+      arguments: [{ name: "path", value: "", required: true }],
       properties: []
     },
     {
       name: "limits",
+      type: "standard",
       arguments: [],
       properties: [
-        { name: "header", placeholder: "size", value: "" },
-        { name: "body", placeholder: "[path] size", value: "" }
+        { name: "header", placeholder: "size", value: "", required: false },
+        { name: "body", placeholder: "[path] size", value: "", required: false }
       ]
     },
     {
       name: "log",
+      type: "standard",
       arguments: [
-        { name: "path", value: "" },
-        { name: "file", value: "" },
-        { name: "[format]", value: "" }
+        { name: "path", value: "", required: true },
+        { name: "file", value: "", required: true },
+        { name: "[format]", value: "", required: false }
       ],
       properties: [
-        { name: "rotate_size", placeholder: "mb", value: "" },
-        { name: "rotate_age", placeholder: "days", value: "" },
-        { name: "rotate_keep", placeholder: "count", value: "" },
-        { name: "rotate_compress", placeholder: "true/false", value: "" },
-        { name: "ipmask", placeholder: "ipv4_mask [ipv6_mask]", value: "" },
-        { name: "except", placeholder: "paths...", value: "" }
+        { name: "rotate_size", placeholder: "mb", value: "", required: false },
+        { name: "rotate_age", placeholder: "days", value: "", required: false },
+        {
+          name: "rotate_keep",
+          placeholder: "count",
+          value: "",
+          required: false
+        },
+        {
+          name: "rotate_compress",
+          placeholder: "true/false",
+          value: "",
+          required: false
+        },
+        {
+          name: "ipmask",
+          placeholder: "ipv4_mask [ipv6_mask]",
+          value: "",
+          required: false
+        },
+        { name: "except", placeholder: "paths...", value: "", required: false }
       ]
     },
     {
       name: "markdown",
-      arguments: [{ name: "[basepath]", value: "" }],
+      type: "standard",
+      arguments: [{ name: "[basepath]", value: "", required: false }],
       properties: [
-        { name: "ext", placeholder: "extensions...", value: "" },
-        { name: "css", placeholder: "file", value: "" },
-        { name: "js", placeholder: "file", value: "" },
-        { name: "template", placeholder: "[name] path", value: "" },
-        { name: "templatedir", placeholder: "defaultpath", value: "" }
+        {
+          name: "ext",
+          placeholder: "extensions...",
+          value: "",
+          required: false
+        },
+        { name: "css", placeholder: "file", value: "", required: false },
+        { name: "js", placeholder: "file", value: "", required: false },
+        {
+          name: "template",
+          placeholder: "[name] path",
+          value: "",
+          required: false
+        },
+        {
+          name: "templatedir",
+          placeholder: "defaultpath",
+          value: "",
+          required: false
+        }
       ]
     },
     {
       name: "mime",
+      type: "standard",
       arguments: [],
       properties: [
-        { name: "ext 1", placeholder: "type", value: "" },
-        { name: "ext 2", placeholder: "type", value: "" },
-        { name: "ext 3", placeholder: "type", value: "" }
+        { name: "", placeholder: "ext type", value: "", required: false },
+        { name: "", placeholder: "ext type", value: "", required: false },
+        { name: "", placeholder: "ext type", value: "", required: false }
       ]
     },
     {
       name: "on",
-      arguments: [{ name: "event", value: "" }, { name: "command", value: "" }],
+      type: "standard",
+      arguments: [
+        { name: "event", value: "", required: true },
+        { name: "command", value: "", required: true }
+      ],
       properties: []
     },
-    { name: "pprof", arguments: [], properties: [] },
+    { name: "pprof", type: "standard", arguments: [], properties: [] },
     {
       name: "proxy",
-      arguments: [{ name: "from", value: "" }, { name: "to", value: "" }],
+      type: "standard",
+      arguments: [
+        { name: "from", value: "", required: true },
+        { name: "to", value: "", required: true }
+      ],
       properties: [
-        { name: "policy", placeholder: "name [value]", value: "" },
-        { name: "fail_timeout", placeholder: "duration", value: "" },
-        { name: "max_fails", placeholder: "integer", value: "" },
-        { name: "max_conns", placeholder: "integer", value: "" },
-        { name: "try_duration", placeholder: "duration", value: "" },
-        { name: "try_interval", placeholder: "duration", value: "" },
-        { name: "health_check", placeholder: "path", value: "" },
-        { name: "health_check_port", placeholder: "port", value: "" },
+        {
+          name: "policy",
+          placeholder: "name [value]",
+          value: "",
+          required: false
+        },
+        {
+          name: "fail_timeout",
+          placeholder: "duration",
+          value: "",
+          required: false
+        },
+        {
+          name: "max_fails",
+          placeholder: "integer",
+          value: "",
+          required: false
+        },
+        {
+          name: "max_conns",
+          placeholder: "integer",
+          value: "",
+          required: false
+        },
+        {
+          name: "try_duration",
+          placeholder: "duration",
+          value: "",
+          required: false
+        },
+        {
+          name: "try_interval",
+          placeholder: "duration",
+          value: "",
+          required: false
+        },
+        {
+          name: "health_check",
+          placeholder: "path",
+          value: "",
+          required: false
+        },
+        {
+          name: "health_check_port",
+          placeholder: "port",
+          value: "",
+          required: false
+        },
         {
           name: "health_check_interval",
           placeholder: "interval_duration",
-          value: ""
+          value: "",
+          required: true
         },
         {
           name: "health_check_timeout",
           placeholder: "timeout_duration",
-          value: ""
+          value: "",
+          required: true
         },
-        { name: "fallback_delay", placeholder: "delay_duration", value: "" },
-        { name: "header_upstream", placeholder: "name value", value: "" },
-        { name: "header_downstream", placeholder: "name value", value: "" },
-        { name: "keepalive", placeholder: "number", value: "" },
-        { name: "timeout", placeholder: "duration", value: "" },
-        { name: "without", placeholder: "prefix", value: "" },
-        { name: "except", placeholder: "ignored_paths...", value: "" },
-        { name: "upstream", placeholder: "to", value: "" },
-        { name: "ca_certificates", placeholder: "certs...", value: "" },
-        { name: "insecure_skip_verify", placeholder: "true/false", value: "" },
-        { name: "preset", placeholder: "", value: "" }
+        {
+          name: "fallback_delay",
+          placeholder: "delay_duration",
+          value: "",
+          required: true
+        },
+        {
+          name: "header_upstream",
+          placeholder: "name value",
+          value: "",
+          required: true
+        },
+        {
+          name: "header_downstream",
+          placeholder: "name value",
+          value: "",
+          required: true
+        },
+        { name: "keepalive", placeholder: "number", value: "", required: true },
+        { name: "timeout", placeholder: "duration", value: "", required: true },
+        { name: "without", placeholder: "prefix", value: "", required: true },
+        {
+          name: "except",
+          placeholder: "ignored_paths...",
+          value: "",
+          required: true
+        },
+        { name: "upstream", placeholder: "to", value: "", required: true },
+        {
+          name: "ca_certificates",
+          placeholder: "certs...",
+          value: "",
+          required: true
+        },
+        {
+          name: "insecure_skip_verify",
+          placeholder: "true/false",
+          value: "",
+          required: true
+        },
+        { name: "preset", placeholder: "", value: "", required: true }
       ]
     },
     {
       name: "push",
+      type: "standard",
       arguments: [
-        { name: "path", value: "" },
-        { name: "[resources...]", value: "" }
+        { name: "path", value: "", required: true },
+        { name: "[resources...]", value: "", required: false }
       ],
       properties: [
-        { name: "method", placeholder: "method", value: "" },
-        { name: "header", placeholder: "name value", value: "" },
-        { name: "resources", placeholder: "true/false", value: "" }
+        { name: "method", placeholder: "method", value: "", required: false },
+        {
+          name: "header",
+          placeholder: "name value",
+          value: "",
+          required: false
+        },
+        {
+          name: "resources",
+          placeholder: "true/false",
+          value: "",
+          required: false
+        }
       ]
     },
     {
       name: "redir",
+      type: "standard",
       arguments: [
-        { name: "from", value: "" },
-        { name: "to", value: "" },
-        { name: "[code]", value: "" }
+        { name: "from", value: "", required: true },
+        { name: "to", value: "", required: true },
+        { name: "[code]", value: "", required: false }
       ],
-      properties: []
+      properties: [
+        { name: "if", value: "", required: false },
+        { name: "if_op", value: "", required: false }
+      ]
     },
     {
       name: "request_id",
-      arguments: [{ name: "[header_field]", value: "" }],
+      type: "standard",
+      arguments: [{ name: "[header_field]", value: "", required: false }],
       properties: []
     },
     {
       name: "rewrite",
+      type: "standard",
       arguments: [
-        { name: "[not]", value: "" },
-        { name: "from", value: "" },
-        { name: "to", value: "" }
+        { name: "[not]", value: "", required: false },
+        { name: "from", value: "", required: true },
+        { name: "to", value: "", required: true }
       ],
       properties: []
     },
-    { name: "root", arguments: [{ name: "path", value: "" }], properties: [] },
+    {
+      name: "root",
+      type: "standard",
+      arguments: [{ name: "path", value: "", required: true }],
+      properties: []
+    },
     {
       name: "status",
-      arguments: [{ name: "code", value: "" }, { name: "path", value: "" }],
+      type: "standard",
+      arguments: [
+        { name: "code", value: "", required: true },
+        { name: "path", value: "", required: true }
+      ],
       properties: []
     },
     {
       name: "templates",
+      type: "standard",
       arguments: [],
       properties: [
-        { name: "path", placeholder: "basepath", value: "" },
-        { name: "ext", placeholder: "extensions...", value: "" },
-        { name: "between", placeholder: "open_delim close_delim", value: "" }
+        { name: "path", placeholder: "basepath", value: "", required: true },
+        {
+          name: "ext",
+          placeholder: "extensions...",
+          value: "",
+          required: true
+        },
+        {
+          name: "between",
+          placeholder: "open_delim close_delim",
+          value: "",
+          required: true
+        }
       ]
     },
     {
       name: "timeouts",
+      type: "standard",
       arguments: [],
       properties: [
-        { name: "read", placeholder: "val", value: "" },
-        { name: "header", placeholder: "val", value: "" },
-        { name: "write", placeholder: "val", value: "" },
-        { name: "idle", placeholder: "val", value: "" }
+        { name: "read", placeholder: "val", value: "", required: false },
+        { name: "header", placeholder: "val", value: "", required: false },
+        { name: "write", placeholder: "val", value: "", required: false },
+        { name: "idle", placeholder: "val", value: "", required: false }
       ]
     },
     {
       name: "tls",
-      arguments: [{ name: "of/email/self_signed/cert key", value: "" }],
+      type: "standard",
+      arguments: [
+        { name: "of/email/self_signed/cert key", value: "", required: true }
+      ],
       properties: []
     },
     {
       name: "websocket",
+      type: "standard",
       arguments: [
-        { name: "[path]", value: "" },
-        { name: "command", value: "" }
+        { name: "[path]", value: "", required: false },
+        { name: "command", value: "", required: true }
       ],
       properties: []
+    },
+    /* MIDDLEWARE */
+    {
+      name: "dyndns",
+      type: "middleware",
+      arguments: [],
+      properties: [
+        {
+          name: "provider",
+          placeholder: "cloudflare/yandex",
+          value: "",
+          required: true
+        },
+        {
+          name: "ipaddress",
+          placeholder: "http-url/remote/local/xxx.xxx.xxx.xxx",
+          value: "",
+          required: true
+        },
+        {
+          name: "auth",
+          placeholder: "AuthApikeyToken",
+          value: "",
+          required: true
+        },
+        { name: "domains", placeholder: "name.tld", value: "", required: true },
+        {
+          name: "period",
+          placeholder: "XXs/XXm/XXh/XXd",
+          value: "",
+          required: true
+        }
+      ]
+    },
+    {
+      name: "http.authz",
+      type: "middleware",
+      arguments: [
+        {
+          namme: "model",
+          placeholder: "authz_model.conf",
+          value: "",
+          required: true
+        },
+        {
+          namme: "policy",
+          placeholder: "authz_policy.csv",
+          value: "",
+          required: true
+        }
+      ],
+      properties: []
+    },
+    {
+      name: "http.awses",
+      type: "middleware",
+      arguments: [
+        { namme: "domain", placeholder: "/", value: "", required: true }
+      ],
+      properties: [
+        {
+          namme: "region",
+          placeholder: "us-east-1",
+          value: "",
+          required: true
+        },
+        { namme: "domain", placeholder: "domain", value: "", required: true },
+        { namme: "role", placeholder: "role", value: "", required: true }
+      ]
+    },
+    {
+      name: "http.awslambda",
+      type: "middleware",
+      arguments: [
+        { namme: "domain", placeholder: "/", value: "", required: true }
+      ],
+      properties: [
+        {
+          namme: "aws_region",
+          placeholder: "us-east-1",
+          value: "",
+          required: true
+        },
+        { namme: "qualifier", placeholder: "prod", value: "", required: true },
+        { namme: "include", placeholder: "api-*", value: "", required: true },
+        {
+          namme: "exclude",
+          placeholder: "*-internal",
+          value: "",
+          required: true
+        }
+      ]
+    },
+    {
+      name: "http.cache",
+      type: "middleware",
+      arguments: [],
+      properties: [
+        {
+          namme: "match_path",
+          placeholder: "/assets",
+          value: "",
+          required: true
+        },
+        {
+          namme: "match_header",
+          placeholder: "Content-Type image/jpg image/png",
+          value: "",
+          required: true
+        },
+        {
+          namme: "status_header",
+          placeholder: "X-Cache-Status",
+          value: "",
+          required: true
+        },
+        {
+          namme: "default_max_age",
+          placeholder: "15m",
+          value: "",
+          required: true
+        },
+        {
+          namme: "path",
+          placeholder: "/tmp/caddy-cache",
+          value: "",
+          required: true
+        }
+      ]
+    },
+    {
+      name: "http.cors",
+      type: "middleware",
+      arguments: [{ namme: "url", placeholder: "", value: "", required: true }],
+      properties: [
+        { namme: "origin", placeholder: "url", value: "", required: false },
+        {
+          namme: "methods",
+          placeholder: "POST, PUT...",
+          value: "",
+          required: false
+        },
+        {
+          namme: "allow_credentials",
+          placeholder: "true/false",
+          value: "",
+          required: false
+        },
+        { namme: "max_age", placeholder: "3600", value: "", required: false },
+        {
+          namme: "allowed_headers",
+          placeholder: "",
+          value: "",
+          required: false
+        },
+        {
+          namme: "exposed_headers",
+          placeholder: "",
+          value: "",
+          required: false
+        }
+      ]
+    },
+    {
+      name: "http.datadog",
+      type: "middleware",
+      arguments: [
+        { namme: "area", placeholder: "area", value: "", required: false }
+      ],
+      properties: [
+        { namme: "statsd", placeholder: "", value: "", required: false },
+        { namme: "tags", placeholder: "", value: "", required: false },
+        { namme: "namespace", placeholder: "", value: "", required: false },
+        { namme: "trace_enabled", placeholder: "", value: "", required: false },
+        { namme: "trace_agent", placeholder: "", value: "", required: false },
+        { namme: "service_name", placeholder: "", value: "", required: false }
+      ]
+    },
+    {
+      name: "http.expires",
+      type: "middleware",
+      arguments: [],
+      properties: [
+        {
+          namme: "match",
+          placeholder: "some/path/.*.css$ 1y",
+          value: "",
+          required: true
+        }
+      ]
+    },
+    {
+      name: "http.filebrowser",
+      type: "middleware",
+      arguments: [
+        { namme: "[url]", placeholder: "", value: "", required: false },
+        { namme: "[scope]", placeholder: "", value: "", required: false }
+      ],
+      properties: [
+        { namme: "database", placeholder: "", value: "", required: false },
+        { namme: "auth_method", placeholder: "", value: "", required: false },
+        { namme: "auth_header", placeholder: "", value: "", required: false },
+        { namme: "recaptcha_key", placeholder: "", value: "", required: false },
+        {
+          namme: "recaptcha_secret",
+          placeholder: "",
+          value: "",
+          required: false
+        },
+        { namme: "recaptcha_host", placeholder: "", value: "", required: false }
+      ]
+    },
+    {
+      name: "http.filter",
+      type: "middleware",
+      arguments: [
+        { namme: "rule", placeholder: "rule", value: "rule", required: true }
+      ],
+      properties: [
+        { namme: "content_type", placeholder: "", value: "", required: false },
+        {
+          namme: "search_pattern",
+          placeholder: "",
+          value: "",
+          required: false
+        },
+        { namme: "replacement", placeholder: "", value: "", required: false },
+        { namme: "path", placeholder: "", value: "", required: false }
+      ]
+    },
+    {
+      name: "http.forwardproxy",
+      type: "middleware",
+      arguments: [{ namme: "url", placeholder: "", value: "", required: true }],
+      properties: [
+        {
+          namme: "basicauth",
+          placeholder: "user password",
+          value: "",
+          required: false
+        },
+        { namme: "upstream", placeholder: "", value: "", required: false },
+        { namme: "hide_ip", placeholder: "", value: "", required: false },
+        {
+          namme: "probe_resistance",
+          placeholder: "",
+          value: "",
+          required: false
+        }
+      ]
+    },
+    {
+      name: "http.cors",
+      type: "middleware",
+      arguments: [{ namme: "url", placeholder: "", value: "", required: true }],
+      properties: [{ namme: "url", placeholder: "", value: "", required: true }]
+    },
+    {
+      name: "http.cors",
+      type: "middleware",
+      arguments: [{ namme: "url", placeholder: "", value: "", required: true }],
+      properties: [{ namme: "url", placeholder: "", value: "", required: true }]
+    },
+    {
+      name: "http.cors",
+      type: "middleware",
+      arguments: [{ namme: "url", placeholder: "", value: "", required: true }],
+      properties: [{ namme: "url", placeholder: "", value: "", required: true }]
     }
   ];
 
