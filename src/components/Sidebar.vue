@@ -6,8 +6,15 @@
         <div class="directive" v-for="element in directives" :key="element.name">
           <div class="directive-name">{{ element.name }}</div>
           <a
+            v-if="element.type !== 'middleware'"
             class="directive-info"
             :href="'https://caddyserver.com/docs/' + element.name"
+            target="_blank"
+          >?</a>
+          <a
+            v-else
+            class="directive-info"
+            :href="'https://caddyserver.com/docs/http.' + element.name"
             target="_blank"
           >?</a>
         </div>
