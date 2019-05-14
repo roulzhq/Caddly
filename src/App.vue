@@ -626,7 +626,7 @@ export default class App extends Vue {
       ]
     },
     {
-      name: "http.authz",
+      name: "authz",
       type: "middleware",
       arguments: [
         {
@@ -645,7 +645,7 @@ export default class App extends Vue {
       properties: []
     },
     {
-      name: "http.awses",
+      name: "awses",
       type: "middleware",
       arguments: [
         { namme: "domain", placeholder: "/", value: "", required: true }
@@ -662,7 +662,7 @@ export default class App extends Vue {
       ]
     },
     {
-      name: "http.awslambda",
+      name: "awslambda",
       type: "middleware",
       arguments: [
         { namme: "domain", placeholder: "/", value: "", required: true }
@@ -685,7 +685,7 @@ export default class App extends Vue {
       ]
     },
     {
-      name: "http.cache",
+      name: "cache",
       type: "middleware",
       arguments: [],
       properties: [
@@ -722,7 +722,7 @@ export default class App extends Vue {
       ]
     },
     {
-      name: "http.cors",
+      name: "cors",
       type: "middleware",
       arguments: [{ namme: "url", placeholder: "", value: "", required: true }],
       properties: [
@@ -755,7 +755,7 @@ export default class App extends Vue {
       ]
     },
     {
-      name: "http.datadog",
+      name: "datadog",
       type: "middleware",
       arguments: [
         { namme: "area", placeholder: "area", value: "", required: false }
@@ -770,7 +770,7 @@ export default class App extends Vue {
       ]
     },
     {
-      name: "http.expires",
+      name: "expires",
       type: "middleware",
       arguments: [],
       properties: [
@@ -783,7 +783,7 @@ export default class App extends Vue {
       ]
     },
     {
-      name: "http.filebrowser",
+      name: "filebrowser",
       type: "middleware",
       arguments: [
         { namme: "[url]", placeholder: "", value: "", required: false },
@@ -804,7 +804,7 @@ export default class App extends Vue {
       ]
     },
     {
-      name: "http.filter",
+      name: "filter",
       type: "middleware",
       arguments: [
         { namme: "rule", placeholder: "rule", value: "rule", required: true }
@@ -822,7 +822,7 @@ export default class App extends Vue {
       ]
     },
     {
-      name: "http.forwardproxy",
+      name: "forwardproxy",
       type: "middleware",
       arguments: [{ namme: "url", placeholder: "", value: "", required: true }],
       properties: [
@@ -843,22 +843,392 @@ export default class App extends Vue {
       ]
     },
     {
-      name: "http.cors",
+      name: "geoip",
       type: "middleware",
-      arguments: [{ namme: "url", placeholder: "", value: "", required: true }],
-      properties: [{ namme: "url", placeholder: "", value: "", required: true }]
+      arguments: [
+        {
+          namme: "path",
+          placeholder: "path to the database",
+          value: "",
+          required: true
+        }
+      ],
+      properties: []
     },
     {
-      name: "http.cors",
+      name: "git",
       type: "middleware",
-      arguments: [{ namme: "url", placeholder: "", value: "", required: true }],
-      properties: [{ namme: "url", placeholder: "", value: "", required: true }]
+      arguments: [
+        { namme: "[repo]", placeholder: "", value: "", required: false },
+        { namme: "[path]", placeholder: "", value: "", required: false }
+      ],
+      properties: [
+        { namme: "repo", placeholder: "repo", value: "", required: false },
+        { namme: "path", placeholder: "path", value: "", required: false },
+        { namme: "branch", placeholder: "branch", value: "", required: false },
+        { namme: "key", placeholder: "key", value: "", required: false },
+        {
+          namme: "interval",
+          placeholder: "interval",
+          value: "",
+          required: false
+        },
+        {
+          namme: "clone_args",
+          placeholder: "args",
+          value: "",
+          required: false
+        },
+        { namme: "pull_args", placeholder: "args", value: "", required: false },
+        {
+          namme: "hook",
+          placeholder: "path secret",
+          value: "",
+          required: false
+        },
+        { namme: "hook_type", placeholder: "type", value: "", required: false },
+        {
+          namme: "then",
+          placeholder: "command [args...]",
+          value: "",
+          required: false
+        },
+        {
+          namme: "then_long",
+          placeholder: "command [args...]",
+          value: "",
+          required: false
+        }
+      ]
     },
     {
-      name: "http.cors",
+      name: "gopkg",
       type: "middleware",
-      arguments: [{ namme: "url", placeholder: "", value: "", required: true }],
-      properties: [{ namme: "url", placeholder: "", value: "", required: true }]
+      arguments: [
+        { namme: "[path]", placeholder: "path", value: "", required: false },
+        { namme: "[vcs]", placeholder: "git etc.", value: "", required: false },
+        {
+          namme: "[repo-url]",
+          placeholder: "repo-url",
+          value: "",
+          required: false
+        }
+      ],
+      properties: []
+    },
+    {
+      name: "grpc",
+      type: "middleware",
+      arguments: [
+        { namme: "backend_addr", placeholder: "", value: "", required: true }
+      ],
+      properties: [
+        {
+          namme: "backend_is_insecure",
+          placeholder: "",
+          value: "",
+          required: false
+        }, // no keyword
+        {
+          namme: "backend_tls_noverify",
+          placeholder: "",
+          value: "",
+          required: false
+        }, // no keyword
+        {
+          namme: "backend_tls_ca_files",
+          placeholder: "",
+          value: "",
+          required: false
+        } // no keyword
+      ]
+    },
+    {
+      name: "ipfilter",
+      type: "middleware",
+      arguments: [
+        { namme: "basepath", placeholder: "", value: "", required: true }
+      ],
+      properties: [
+        {
+          namme: "rule",
+          placeholder: "block | allow",
+          value: "",
+          required: false
+        },
+        {
+          namme: "ip",
+          placeholder: "addresses or CIDR ranges to block",
+          value: "",
+          required: false
+        },
+        {
+          namme: "prefix_dir",
+          placeholder: "IP addr directory prefix",
+          value: "",
+          required: false
+        },
+        {
+          namme: "database",
+          placeholder: "/path/to/GeoLite2-Country.mmdb",
+          value: "",
+          required: false
+        },
+        {
+          namme: "country",
+          placeholder: "ISO two letter country codes",
+          value: "",
+          required: false
+        },
+        {
+          namme: "blockpage",
+          placeholder: "blockpage.html",
+          value: "",
+          required: false
+        },
+        { namme: "strict", placeholder: "", value: "", required: false } // boolean
+      ]
+    },
+    {
+      name: "jwt",
+      type: "middleware",
+      arguments: [],
+      properties: [
+        { namme: "path", placeholder: "[path]", value: "", required: true },
+        {
+          namme: "redirect",
+          placeholder: "[location]",
+          value: "",
+          required: false
+        },
+        {
+          namme: "allow ",
+          placeholder: "[claim] [value]",
+          value: "",
+          required: false
+        },
+        {
+          namme: "deny ",
+          placeholder: "[claim] [value]",
+          value: "",
+          required: false
+        }
+      ]
+    },
+    {
+      name: "locale",
+      type: "middleware",
+      arguments: [
+        {
+          namme: "availableLocales...",
+          placeholder: "",
+          value: "",
+          required: true
+        }
+      ],
+      properties: [
+        {
+          namme: "detect",
+          placeholder: "methods...",
+          value: "",
+          required: false
+        },
+        {
+          namme: "cookie",
+          placeholder: "cookie name",
+          value: "",
+          required: false
+        },
+        {
+          namme: "available",
+          placeholder: "availableLocales...",
+          value: "",
+          required: false
+        },
+        { namme: "path", placeholder: "path scope", value: "", required: false }
+      ]
+    },
+    {
+      name: "login",
+      type: "middleware",
+      arguments: [],
+      properties: [
+        {
+          namme: "success_url",
+          placeholder: "/after/login",
+          value: "",
+          required: false
+        },
+        {
+          namme: "cookie_name",
+          placeholder: "alternativeName",
+          value: "",
+          required: false
+        },
+        {
+          namme: "cookie_http_only",
+          placeholder: "true",
+          value: "",
+          required: false
+        },
+        {
+          namme: "simple",
+          placeholder: "bob=secret",
+          value: "",
+          required: true
+        },
+        {
+          namme: "osiam",
+          placeholder: "endpoint,client_id,client_secret",
+          value: "",
+          required: false
+        },
+        {
+          namme: "htpasswd",
+          placeholder: "file=users",
+          value: "",
+          required: false
+        },
+        {
+          namme: "github",
+          placeholder: "client_id=xxx,client_secret=yyy",
+          value: "",
+          required: false
+        },
+        {
+          namme: "google",
+          placeholder: "client_id=xxx,client_secret=yyy,scope=email",
+          value: "",
+          required: false
+        }
+      ]
+    },
+    {
+      name: "mailout",
+      type: "middleware",
+      arguments: [
+        { namme: "mailout", placeholder: "/mailout", value: "", required: true }
+      ],
+      properties: [
+        {
+          namme: "maillog",
+          placeholder: "/var/log/caddy/mailout/",
+          value: "",
+          required: false
+        },
+        {
+          namme: "errorlog",
+          placeholder: "/var/log/caddy/mailout/",
+          value: "",
+          required: false
+        },
+        {
+          namme: "cyr1ll@5chumach3r.fm",
+          placeholder: "https://keybase.io/cyrill/key.asc",
+          value: "",
+          required: false
+        },
+        {
+          namme: "to",
+          placeholder: "",
+          value: "cyr1ll@5chumach3r.fm",
+          required: false
+        },
+        {
+          namme: "subject",
+          placeholder: "'Private Blog Contact Form'",
+          value: "",
+          required: false
+        },
+        {
+          namme: "body",
+          placeholder: "/var/www/webspace.com/email.txt",
+          value: "",
+          required: false
+        },
+        {
+          namme: "username",
+          placeholder: "'what_ever_your_username_is@gmail.com'",
+          value: "",
+          required: false
+        },
+        {
+          namme: "password",
+          placeholder: "'NowW3Hav3Th35alad'",
+          value: "",
+          required: false
+        },
+        {
+          namme: "host",
+          placeholder: "smtp.gmail.com",
+          value: "",
+          required: false
+        },
+        { namme: "port", placeholder: "587", value: "", required: false },
+        {
+          namme: "ratelimit_interval",
+          placeholder: "24h",
+          value: "",
+          required: false
+        },
+        {
+          namme: "ratelimit_capacity",
+          placeholder: "100",
+          value: "",
+          required: false
+        }
+      ]
+    },
+    {
+      name: "minify",
+      type: "middleware",
+      arguments: [
+        { namme: "if", placeholder: "paths...", value: "", required: true }
+      ],
+      properties: [
+        { namme: "if", placeholder: "a cond b", value: "", required: false },
+        { namme: "url", placeholder: "[and|or]", value: "", required: false },
+        {
+          namme: "url",
+          placeholder: "[js|css|html|json|svg|xml]",
+          value: "",
+          required: false
+        },
+        {
+          namme: "url",
+          placeholder: "option value",
+          value: "",
+          required: false
+        }
+      ]
+    },
+    {
+      name: "nobots",
+      type: "middleware",
+      arguments: [
+        { namme: "bomb path", placeholder: "", value: "", required: true }
+      ],
+      properties: [
+        {
+          namme: "",
+          placeholder: "Googlebot/2.1 (+http://www.googlebot.com/bot.html)",
+          value: "",
+          required: false
+        }, // no keyword
+        { namme: "", placeholder: "DuckDuckBot", value: "", required: false }, // no keyword
+        {
+          namme: "",
+          placeholder: "regexp '^[Bb]ot'",
+          value: "",
+          required: false
+        }, // no keyword
+        {
+          namme: "",
+          placeholder: "regexp 'bingbot'",
+          value: "",
+          required: false
+        } // no keyword
+      ]
     }
   ];
 
