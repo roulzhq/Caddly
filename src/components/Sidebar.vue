@@ -3,7 +3,7 @@
     <Heading title="Directives"></Heading>
     <div>
       <draggable :list="directives" :group="{ name: 'directives', pull: 'clone', put: false }">
-        <div class="directive" v-for="element in directives" :key="element.name">
+        <div class="directive" v-for="element in directives" :key="element.name" @click="addDirective(element)">
           <div class="directive-name">{{ element.name }}</div>
           <a
             v-if="element.type !== 'middleware'"
@@ -38,6 +38,7 @@ import Heading from "./Heading.vue";
 })
 export default class Sidebar extends Vue {
   @Prop() private directives: any;
+  @Prop() private addDirective: any;
 }
 </script>
 

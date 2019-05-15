@@ -14,8 +14,9 @@
         :setActiveSite="setActiveSite"
         :activeSite="activeSite"
         :createSite="createSite"
+        ref="editor"
       ></Editor>
-      <Sidebar :directives="this.directives"></Sidebar>
+      <Sidebar :directives="directives" :addDirective="refs.editor.addDirective"></Sidebar>
       <Nav :onExportButtonClick="onExportButtonClick"></Nav>
     </div>
 
@@ -107,6 +108,13 @@ interface Directive {
   }
 })
 export default class App extends Vue {
+  private refs: any = {
+    editor: {
+      // tslint:disable-next-line
+      addDirective: () => {}
+    }
+  };
+
   private exportFileName = "Caddyfile";
   private caddyfile = "";
   private spacing = "\t";
@@ -786,8 +794,8 @@ export default class App extends Vue {
       name: "filebrowser",
       type: "middleware",
       arguments: [
-        { namme: "[url]", placeholder: "", value: "", required: false },
-        { namme: "[scope]", placeholder: "", value: "", required: false }
+        { namme: "[url]", placeholder: "[url]", value: "", required: false },
+        { namme: "[scope]", placeholder: "[scope]", value: "", required: false }
       ],
       properties: [
         { namme: "database", placeholder: "", value: "", required: false },
@@ -824,7 +832,7 @@ export default class App extends Vue {
     {
       name: "forwardproxy",
       type: "middleware",
-      arguments: [{ namme: "url", placeholder: "", value: "", required: true }],
+      arguments: [{ namme: "url", placeholder: "url", value: "", required: true }],
       properties: [
         {
           namme: "basicauth",
@@ -848,7 +856,7 @@ export default class App extends Vue {
       arguments: [
         {
           namme: "path",
-          placeholder: "path to the database",
+          placeholder: "path",
           value: "",
           required: true
         }
@@ -859,8 +867,8 @@ export default class App extends Vue {
       name: "git",
       type: "middleware",
       arguments: [
-        { namme: "[repo]", placeholder: "", value: "", required: false },
-        { namme: "[path]", placeholder: "", value: "", required: false }
+        { namme: "[repo]", placeholder: "[repo]", value: "", required: false },
+        { namme: "[path]", placeholder: "[path]", value: "", required: false }
       ],
       properties: [
         { namme: "repo", placeholder: "repo", value: "", required: false },
@@ -920,7 +928,7 @@ export default class App extends Vue {
       name: "grpc",
       type: "middleware",
       arguments: [
-        { namme: "backend_addr", placeholder: "", value: "", required: true }
+        { namme: "backend_addr", placeholder: "backend_addr", value: "", required: true }
       ],
       properties: [
         {
@@ -947,7 +955,7 @@ export default class App extends Vue {
       name: "ipfilter",
       type: "middleware",
       arguments: [
-        { namme: "basepath", placeholder: "", value: "", required: true }
+        { namme: "basepath", placeholder: "basepath", value: "", required: true }
       ],
       properties: [
         {
@@ -1130,8 +1138,8 @@ export default class App extends Vue {
         },
         {
           namme: "to",
-          placeholder: "",
-          value: "cyr1ll@5chumach3r.fm",
+          placeholder: "cyr1ll@5chumach3r.fm",
+          value: "",
           required: false
         },
         {
@@ -1231,6 +1239,10 @@ export default class App extends Vue {
       ]
     }
   ];
+
+  private mounted() {
+    this.refs = this.$refs;
+  }
 
   private closeAlphaWarning() {
     this.showAlphaWarning = false;
@@ -1556,7 +1568,8 @@ select {
   outline: none;
 }
 
-button {
+button,
+input[type=submit] {
   padding: 5px 10px;
   border: none;
   outline: none;
@@ -1568,7 +1581,8 @@ button {
   transition: 0.1s all cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-button:hover {
+button:hover,
+input[type=submit]:hover {
   background: #448aff;
 }
 
