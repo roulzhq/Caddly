@@ -14,11 +14,7 @@
       </div>
       <div class="Editor-sites-container">
         <keep-alive>
-          <Site
-            v-for="site in activeSite"
-            :key="site.name"
-            :directives="siteDirective"
-          ></Site>
+          <Site v-for="site in activeSite" :key="site.name" :directives="siteDirective"></Site>
         </keep-alive>
       </div>
     </div>
@@ -27,7 +23,7 @@
         <div class="Editor-sites-new-modal">
           <div>
             <label style="display: block;">Name</label>
-            <input type="text" v-model="newSiteName" placeholder="Space-seperated list" />
+            <input type="text" v-model="newSiteName" placeholder="Space-seperated list">
             <button @click="handleCreateSite(newSiteName)">Create</button>
           </div>
         </div>
@@ -59,6 +55,10 @@ export default class Editor extends Vue {
 
   private showCreateSiteModal: boolean = false;
   private newSiteName: string = "";
+
+  public addDirective(directive: any) {
+    this.activeSite.directives.push(directive);
+  }
 
   private showSiteModal() {
     this.showCreateSiteModal = true;

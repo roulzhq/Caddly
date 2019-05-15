@@ -14,8 +14,9 @@
         :setActiveSite="setActiveSite"
         :activeSite="activeSite"
         :createSite="createSite"
+        ref="editor"
       ></Editor>
-      <Sidebar :directives="this.directives"></Sidebar>
+      <Sidebar :directives="directives" :addDirective="refs.editor.addDirective"></Sidebar>
       <Nav :onExportButtonClick="onExportButtonClick"></Nav>
     </div>
 
@@ -107,6 +108,13 @@ interface Directive {
   }
 })
 export default class App extends Vue {
+  private refs: any = {
+    editor: {
+      // tslint:disable-next-line
+      addDirective: () => {}
+    }
+  };
+
   private exportFileName = "Caddyfile";
   private caddyfile = "";
   private spacing = "\t";
@@ -1231,6 +1239,10 @@ export default class App extends Vue {
       ]
     }
   ];
+
+  private mounted() {
+    this.refs = this.$refs;
+  }
 
   private closeAlphaWarning() {
     this.showAlphaWarning = false;
