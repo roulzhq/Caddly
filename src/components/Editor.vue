@@ -21,11 +21,11 @@
     <div v-if="showCreateSiteModal">
       <Modal type="input" :onClose="handleCreateSite" title="Create a new Site">
         <div class="Editor-sites-new-modal">
-          <div>
+          <form @submit="handleCreateSite(newSiteName)">
             <label style="display: block;">Name</label>
             <input type="text" v-model="newSiteName" placeholder="Space-seperated list">
-            <button @click="handleCreateSite(newSiteName)">Create</button>
-          </div>
+            <input type="submit" value="Create"/>
+          </form>
         </div>
       </Modal>
     </div>

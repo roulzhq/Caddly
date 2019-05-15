@@ -23,7 +23,12 @@
             class="directive-property"
           >
             <label>{{ property.name }}</label>
-            <input type="text" v-model="property.value" :placeholder="property.placeholder" :required="property.required">
+            <input
+              type="text"
+              v-model="property.value"
+              :placeholder="property.placeholder"
+              :required="property.required"
+            >
           </div>
         </div>
       </div>
@@ -65,6 +70,5 @@ export default class Site extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 .Site {
-    
 }
 </style>
