@@ -2,6 +2,8 @@
 ### Caddly let's you interactively create [Caddyfiles](https://caddyserver.com/tutorial/caddyfile).
 ![Caddly Website](https://i.imgur.com/brvYYl9.png)
 
+This project is no longer activaly maintained. If you want to take it over, feel free to contact me or open PRs.
+
 Even though Caddyfiles have an easy Syntax and are supported in a lot of IDEs and Editors, We thought about how nice it would be to create a server config without having to think about syntax, looking up directives and more.
 With Caddly, you can just drag and drop the required directives, configure them (properties just need to be filled in) and export them in minutes.
 
